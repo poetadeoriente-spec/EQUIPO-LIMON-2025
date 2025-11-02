@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorama Jurídico 🎴 | Equipo Limón 🍋</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 50%, #81C784 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 3px solid #4CAF50;
+        }
+
+        h1 {
+            color: #2E7D32;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .equipo-titulo {
+            color: #FF9800;
+            font-size: 20px;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #E8F5E8 0%, #FFFFFF 100%);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #4CAF50;
+        }
+
+        .player {
+            font-weight: bold;
+            padding: 0 20px;
+            font-size: 16px;
+        }
+
+        .player.active {
+            color: #FF9800;
+            transform: scale(1.05);
+            transition: all 0.3s ease;
+        }
+
+        .separator {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .turno {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #D84315;
+            background: #FFECB3;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #FFA000;
+        }
+
+        .tablero {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 15px;
+        }
+
+        .carta {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            height: 120px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 3px solid #2E7D32;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .carta.volteada {
+            background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+            color: #2E7D32;
+            transform: rotateY(180deg);
+        }
+
+        .carta.encontrada {
+            background: linear-gradient(135deg, #FFEB3B 0%, #FBC02D 100%);
+            color: #5D4037;
+            cursor: default;
+            border-color: #FFA000;
+        }
+
+        .termino {
+            font-size: 16px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .descripcion {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+            line-height: 1.2;
+        }
+
+        .equipo-limon {
+            font-size: 9px;
+            color: #FF9800;
+            margin-top: 3px;
+            font-weight: bold;
+        }
+
+        .controles {
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 2px solid #E65100;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #FFB300 0%, #FF8F00 100%);
+        }
+
+        .equipo {
+            margin-top: 25px;
+            color: #555;
+            font-size: 14px;
+            padding: 15px;
+            background: rgba(255, 152, 0, 0.1);
+            border-radius: 10px;
+            border: 2px solid #FF9800;
+        }
+
+        .equipo strong {
+            color: #FF9800;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .tablero {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 8px;
+            }
+            
+            .carta {
+                height: 90px;
+                font-size: 12px;
+            }
+            
+            .controles {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            button {
+                width: 200px;
+            }
+            
+            h1 {
+                font-size: 22px;
+            }
+            
+            .equipo-titulo {
+                font-size: 16px;
+            }
+        }
+
+        /* Efectos de animación */
+        @keyframes cartaFlip {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(180deg); }
+        }
+
+        .carta.volteada {
+            animation: cartaFlip 0.6s ease;
+        }
+
+        /* Efecto de brillo al encontrar par */
+        @keyframes foundGlow {
+            0% { box-shadow: 0 0 0px rgba(255, 193, 7, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 193, 7, 0.8); }
+            100% { box-shadow: 0 0 0px rgba(255, 193, 7, 0.5); }
+        }
+
+        .carta.encontrada {
+            animation: foundGlow 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎴 MEMORAMA JURÍDICO<br><span class="equipo-titulo">Equipo Limón 🍋</span></h1>
+        
+        <div class="game-info">
+            <div class="player" id="player1">JUGADOR 1: ⭐ <span>0</span></div>
+            <div class="separator">|</div>
+            <div class="player" id="player2">JUGADOR 2: ⭐ <span>0</span></div>
+        </div>
+        
+        <div class="turno" id="turno">TURNO: JUGADOR 1</div>
+        
+        <div class="tablero" id="tablero"></div>
+        
+        <div class="controles">
+            <button onclick="reiniciarJuego()">🔄 REINICIAR</button>
+            <button onclick="toggleDescripciones()">🔍 MOSTRAR DESCRIPCIONES</button>
+            <button onclick="mostrarMenu()">📋 INSTRUCCIONES</button>
+        </div>
+        
+        <div class="equipo">
+            <strong>Desarrollado por Equipo Limón 🍋</strong><br>
+            <small>Memorama Educativo - Derecho Básico</small>
+        </div>
+    </div>
+
+    <script>
+        // Términos del memorama con descripciones mejoradas
+        const terminos = [
+            { 
+                termino: "JUEZ", 
+                emoji: "👨‍⚖️",
+                descripcion: "Magistrado que imparte justicia y dirige procesos judiciales" 
+            },
+            { 
+                termino: "TRIBUNAL", 
+                emoji: "⚖️",
+                descripcion: "Órgano de jueces que resuelve controversias jurídicas" 
+            },
+            { 
+                termino: "LEY", 
+                emoji: "📜",
+                descripcion: "Norma jurídica obligatoria establecida por autoridad" 
+            },
+            { 
+                termino: "JUSTICIA", 
+                emoji: "🏛️",
+                descripcion: "Principio moral de dar a cada uno lo que le corresponde" 
+            },
+            { 
+                termino: "CÁRCEL", 
+                emoji: "🔒",
+                descripcion: "Establecimiento para cumplir penas de privación de libertad" 
+            },
+            { 
+                termino: "CONTRATO", 
+                emoji: "📝",
+                descripcion: "Acuerdo de voluntades que crea derechos y obligaciones" 
+            },
+            { 
+                termino: "ABOGADO", 
+                emoji: "👨‍⚖️",
+                descripcion: "Profesional que defiende derechos en procesos judiciales" 
+            },
+            { 
+                termino: "DEMANDA", 
+                emoji: "💰",
+                descripcion: "Documento que inicia un proceso judicial con pretensiones" 
+            },
+            { 
+                termino: "TESTIGO", 
+                emoji: "🕵️",
+                descripcion: "Persona que declara sobre hechos en proceso judicial" 
+            },
+            { 
+                termino: "PRUEBA", 
+                emoji: "📄",
+                descripcion: "Medio para demostrar la verdad de los hechos en juicio" 
+            },
+            { 
+                termino: "PLAZO", 
+                emoji: "⏰",
+                descripcion: "Tiempo establecido para realizar actos procesales" 
+            },
+            { 
+                termino: "PROPIEDAD", 
+                emoji: "🏠",
+                descripcion: "Derecho de usar, disfrutar y disponer de bienes" 
+            },
+            { 
+                termino: "MATRIMONIO", 
+                emoji: "💍",
+                descripcion: "Unión legal entre personas con derechos y obligaciones" 
+            },
+            { 
+                termino: "PATRIA POTESTAD", 
+                emoji: "👶",
+                descripcion: "Derechos y obligaciones de padres sobre hijos menores" 
+            },
+            { 
+                termino: "SOCIEDAD", 
+                emoji: "🏢",
+                descripcion: "Contrato para contribuir a un fin común con otros" 
+            },
+            { 
+                termino: "HERENCIA", 
+                emoji: "💼",
+                descripcion: "Transmisión de bienes y derechos por fallecimiento" 
+            },
+            { 
+                termino: "DELITO", 
+                emoji: "🚓",
+                descripcion: "Acción u omisión penada por la ley con sanción" 
+            },
+            { 
+                termino: "DERECHOS", 
+                emoji: "🛡️",
+                descripcion: "Facultades o poderes reconocidos a personas por ley" 
+            },
+            { 
+                termino: "DECLARACIÓN", 
+                emoji: "📋",
+                descripcion: "Manifestación formal ante autoridad judicial" 
+            },
+            { 
+                termino: "LITIGIO", 
+                emoji: "⚔️",
+                descripcion: "Controversia sometida a decisión de tribunal judicial" 
+            }
+        ];
+
+        let cartas = [];
+        let cartasVolteadas = [];
+        let jugadorActual = 1;
+        let puntosJ1 = 0;
+        let puntosJ2 = 0;
+        let mostrarDescripciones = true;
+
+        // Iniciar juego
+        function iniciarJuego() {
+            // Crear pares de cartas
+            cartas = [...terminos, ...terminos]
+                .sort(() => Math.random() - 0.5);
+            
+            crearTablero();
+            actualizarMarcador();
+        }
+
+        // Crear el tablero de cartas
+        function crearTablero() {
+            const tablero = document.getElementById('tablero');
+            tablero.innerHTML = '';
+            
+            cartas.forEach((terminoObj, index) => {
+                const carta = document.createElement('div');
+                carta.className = 'carta';
+                carta.textContent = '?';
+                carta.onclick = () => voltearCarta(index);
+                tablero.appendChild(carta);
+            });
+        }
+
+        // Voltear carta
+        function voltearCarta(index) {
+            const carta = document.getElementsByClassName('carta')[index];
+            const terminoObj = cartas[index];
+            
+            // Si ya está volteada o son 2 cartas ya volteadas, no hacer nada
+            if (carta.textContent !== '?' || cartasVolteadas.length >= 2) return;
+            
+            // Mostrar el término y descripción
+            if (mostrarDescripciones) {
+                carta.innerHTML = `
+                    <div class="termino">${terminoObj.emoji} ${terminoObj.termino}</div>
+                    <div class="descripcion">${terminoObj.descripcion}</div>
+                    <div class="equipo-limon">Equipo Limón 🍋</div>
+                `;
+            } else {
+                carta.innerHTML = `
+                    <div class="termino">${terminoObj.emoji} ${terminoObj.termino}</div>
+                    <div class="equipo-limon">Equipo Limón 🍋</div>
+                `;
+            }
+            
+            carta.classList.add('volteada');
+            cartasVolteadas.push(index);
+            
+            if (cartasVolteadas.length === 2) {
+                setTimeout(verificarPar, 1000);
+            }
+        }
+
+        // Verificar si las cartas son pares
+        function verificarPar() {
+            const [index1, index2] = cartasVolteadas;
+            
+            if (cartas[index1].termino === cartas[index2].termino) {
+                // Par encontrado
+                document.getElementsByClassName('carta')[index1].classList.add('encontrada');
+                document.getElementsByClassName('carta')[index2].classList.add('encontrada');
+                
+                if (jugadorActual === 1) {
+                    puntosJ1++;
+                } else {
+                    puntosJ2++;
+                }
+                
+                actualizarMarcador();
+                verificarFinJuego();
+            } else {
+                // No es par, voltear de nuevo
+                voltearAtras(index1);
+                voltearAtras(index2);
+                
+                // Cambiar turno
+                jugadorActual = jugadorActual === 1 ? 2 : 1;
+                actualizarMarcador();
+            }
+            
+            cartasVolteadas = [];
+        }
+
+        // Voltear carta hacia atrás
+        function voltearAtras(index) {
+            const carta = document.getElementsByClassName('carta')[index];
+            carta.textContent = '?';
+            carta.classList.remove('volteada');
+            carta.innerHTML = '?';
+        }
+
+        // Actualizar marcador
+        function actualizarMarcador() {
+            document.getElementById('player1').innerHTML = `JUGADOR 1: ⭐ <span>${puntosJ1}</span>`;
+            document.getElementById('player2').innerHTML = `JUGADOR 2: ⭐ <span>${puntosJ2}</span>`;
+            document.getElementById('turno').textContent = `TURNO: JUGADOR ${jugadorActual}`;
+            
+            // Resaltar jugador activo
+            document.getElementById('player1').classList.toggle('active', jugadorActual === 1);
+            document.getElementById('player2').classList.toggle('active', jugadorActual === 2);
+        }
+
+        // Verificar fin del juego
+        function verificarFinJuego() {
+            const cartasVolteadas = document.getElementsByClassName('carta');
+            let todasEncontradas = true;
+            
+            for (let carta of cartasVolteadas) {
+                if (carta.textContent === '?') {
+                    todasEncontradas = false;
+                    break;
+                }
+            }
+            
+            if (todasEncontradas) {
+                setTimeout(() => {
+                    let mensaje = '';
+                    if (puntosJ1 > puntosJ2) {
+                        mensaje = `¡JUGADOR 1 GANA! 🏆\n\nPuntos: ${puntosJ1} vs ${puntosJ2}`;
+                    } else if (puntosJ2 > puntosJ1) {
+                        mensaje = `¡JUGADOR 2 GANA! 🏆\n\nPuntos: ${puntosJ1} vs ${puntosJ2}`;
+                    } else {
+                        mensaje = `¡EMPATE! 🤝\n\nAmbos jugadores: ${puntosJ1} puntos`;
+                    }
+                    
+                    mensaje += '\n\nDesarrollado por Equipo Limón 🍋';
+                    alert(mensaje);
+                }, 500);
+            }
+        }
+
+        // Reiniciar juego
+        function reiniciarJuego() {
+            cartasVolteadas = [];
+            jugadorActual = 1;
+            puntosJ1 = 0;
+            puntosJ2 = 0;
+            iniciarJuego();
+        }
+
+        // Alternar descripciones
+        function toggleDescripciones() {
+            mostrarDescripciones = !mostrarDescripciones;
+            const boton = document.querySelector('button[onclick="toggleDescripciones()"]');
+            boton.textContent = mostrarDescripciones ? '🔍 OCULTAR DESCRIPCIONES' : '🔍 MOSTRAR DESCRIPCIONES';
+            reiniciarJuego();
+        }
+
+        // Mostrar menú
+        function mostrarMenu() {
+            alert('🎴 MEMORAMA JURÍDICO - Equipo Limón 🍋\n\n• 20 términos jurídicos con descripciones\n• 2 jugadores por turnos\n• Encuentra los pares de términos\n• Gana quien tenga más puntos\n\n¡Aprende derecho jugando!');
+        }
+
+        // Iniciar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', iniciarJuego);
+    </script>
+</body>
+</html>
