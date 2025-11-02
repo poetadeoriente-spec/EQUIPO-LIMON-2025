@@ -1,0 +1,241 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #C8E6C9 0%, #A5D6A7 50%, #81C784 100%);
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border: 3px solid #4CAF50;
+}
+
+h1 {
+    color: #2E7D32;
+    margin-bottom: 20px;
+    font-size: 28px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.equipo-titulo {
+    color: #FF9800;
+    font-size: 20px;
+    display: block;
+    margin-top: 5px;
+}
+
+.game-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #E8F5E8 0%, #FFFFFF 100%);
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    border: 2px solid #4CAF50;
+}
+
+.player {
+    font-weight: bold;
+    padding: 0 20px;
+    font-size: 16px;
+}
+
+.player.active {
+    color: #FF9800;
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.separator {
+    color: #4CAF50;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.turno {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #D84315;
+    background: #FFECB3;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid #FFA000;
+}
+
+.tablero {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 25px;
+    padding: 15px;
+    background: rgba(76, 175, 80, 0.1);
+    border-radius: 15px;
+}
+
+.carta {
+    background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+    color: white;
+    height: 120px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 3px solid #2E7D32;
+    position: relative;
+    overflow: hidden;
+}
+
+.carta:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.carta.volteada {
+    background: linear-gradient(135deg, #FFFFFF 0%, #F5F5F5 100%);
+    color: #2E7D32;
+    transform: rotateY(180deg);
+}
+
+.carta.encontrada {
+    background: linear-gradient(135deg, #FFEB3B 0%, #FBC02D 100%);
+    color: #5D4037;
+    cursor: default;
+    border-color: #FFA000;
+}
+
+.termino {
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.descripcion {
+    font-size: 10px;
+    color: #666;
+    margin-top: 5px;
+    line-height: 1.2;
+}
+
+.equipo-limon {
+    font-size: 9px;
+    color: #FF9800;
+    margin-top: 3px;
+    font-weight: bold;
+}
+
+.controles {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+button {
+    background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    border: 2px solid #E65100;
+}
+
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    background: linear-gradient(135deg, #FFB300 0%, #FF8F00 100%);
+}
+
+.equipo {
+    margin-top: 25px;
+    color: #555;
+    font-size: 14px;
+    padding: 15px;
+    background: rgba(255, 152, 0, 0.1);
+    border-radius: 10px;
+    border: 2px solid #FF9800;
+}
+
+.equipo strong {
+    color: #FF9800;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 15px;
+    }
+    
+    .tablero {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+    
+    .carta {
+        height: 90px;
+        font-size: 12px;
+    }
+    
+    .controles {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    button {
+        width: 200px;
+    }
+    
+    h1 {
+        font-size: 22px;
+    }
+    
+    .equipo-titulo {
+        font-size: 16px;
+    }
+}
+
+/* Efectos de animación */
+@keyframes cartaFlip {
+    0% { transform: rotateY(0deg); }
+    100% { transform: rotateY(180deg); }
+}
+
+.carta.volteada {
+    animation: cartaFlip 0.6s ease;
+}
+
+/* Efecto de brillo al encontrar par */
+@keyframes foundGlow {
+    0% { box-shadow: 0 0 0px rgba(255, 193, 7, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 193, 7, 0.8); }
+    100% { box-shadow: 0 0 0px rgba(255, 193, 7, 0.5); }
+}
+
+.carta.encontrada {
+    animation: foundGlow 1s ease;
+}
